@@ -1,0 +1,14 @@
+.bitrise.secrets.yml
+*.iml
+.gradle
+/local.properties
+/.idea
+/.idea/*
+/build
+/captures
+/release_notes.txt
+.DS_Store
+.swift
+
+#ignore direnv dotfile
+.envrc
