@@ -71,7 +71,8 @@ fun MovieDetailDto.toMovieDetail(): MovieDetailUiModel {
         title,
         type,
         year,
-        imdbRating
+        imdbRating,
+        imdbID
 
     )
 }

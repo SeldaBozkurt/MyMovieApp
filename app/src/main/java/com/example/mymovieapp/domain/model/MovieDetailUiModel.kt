@@ -14,4 +14,5 @@ data class MovieDetailUiModel(
     val type: String,
     val year: String,
     val imdbRating: String,
-    )
+    val imdbId: String,
+)

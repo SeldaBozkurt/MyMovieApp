@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -18,7 +19,7 @@ data class MoviesState(
     val isLoading: Boolean = false,
     val movies: List<MovieUiModel> = emptyList(),
     val error: String = "",
-    val search: String = "batman"
+    val search: String = ""
 )
 
 sealed class MoviesEvent {
@@ -63,6 +64,8 @@ class MoviesViewModel @Inject constructor(
             is MoviesEvent.Search -> {
                 getMovies(event.searchString)
             }
+
+            else -> {}
         }
     }
 }
