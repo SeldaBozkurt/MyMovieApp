@@ -63,7 +63,7 @@ fun MovieDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.DarkGray), contentAlignment = Center
+            .background(Color.Gray), contentAlignment = Center
     ) {
         state.movie?.let {
             Column(

@@ -13,11 +13,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,18 +34,37 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mymovieapp.presentation.Screen
-import com.example.mymovieapp.presentation.movies.MoviesEvent
+import com.example.mymovieapp.presentation.movies.MovieView
 import com.example.mymovieapp.presentation.movies.MoviesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MovieScreen(
     navController: NavController,
     viewModel : MoviesViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(key1 = viewModel.event) {
+        viewModel.event.collect {
+            withContext(Dispatchers.Main.immediate) {
+                when (it) {
+                    is MovieView.Event.Navigation.GoMovieDetail -> {
+                        navController.navigate(Screen.MovieDetailScreen.route+"/${it.imdbId}")
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
 
     val state = viewModel.state.value
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.DarkGray)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.Gray)) {
 
         Column() {
             MovieSearchBar(modifier = Modifier
@@ -53,7 +72,7 @@ fun MovieScreen(
                 .padding(20.dp),
                 hint = "Batman",
                 onSearch = {
-                    viewModel.onEvent(MoviesEvent.Search(it))
+                    viewModel.onUiAction(MovieView.MoviesUiAction.SearchClicked(it))
                 }
             )
 
@@ -61,7 +80,7 @@ fun MovieScreen(
                 items(state.movies) { movie ->
                     MovieListRow(movieUiModel = movie, onItemClick = {
                         //navigate to details
-                        navController.navigate(Screen.MovieDetailScreen.route+"/${movie.imdbID}")
+                        viewModel.onUiAction(MovieView.MoviesUiAction.MovieItemClicked(it.imdbID))
                     })
                 }
             }
